@@ -26,7 +26,7 @@ jobs:
           python -m pip install -r requirements-live.txt
           python -m pip install .
       - name: Compile
-        run: python -m compileall -q src run_live.py
+        run: python -m compileall -q src run_live.py docker_entrypoint_live.py
       - name: Tests
         run: python -m pytest tests/test_live_platform.py
   docker:
@@ -36,3 +36,15 @@ jobs:
       - uses: actions/checkout@v6
       - name: Build image
         run: docker build -t metalpredictor-public-ci:latest .
+      - name: Validate persistent-volume permissions and privilege drop
+        run: |
+          set -euo pipefail
+          docker volume create metalpredictor-public-ci-data >/dev/null
+          cleanup() {
+            docker volume rm metalpredictor-public-ci-data >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          docker run --rm \
+            -v metalpredictor-public-ci-data:/data \
+            metalpredictor-public-ci:latest \
+            python -c "import os; from pathlib import Path; assert os.geteuid() == 10001, os.geteuid(); p=Path('/data/ci-write-probe'); p.write_text('ok'); assert p.read_text() == 'ok'; p.unlink()"
