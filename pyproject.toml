@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metalpredictor-live-ci"
+version = "1.0.0"
+description = "Sanitized public CI mirror for the MetalPredictor live silver forecast platform"
+requires-python = ">=3.14"
+dependencies = [
+  "numpy==2.5.2",
+  "pandas==3.0.5",
+  "fastapi==0.141.1",
+  "uvicorn[standard]==0.52.1",
+  "pydantic==2.13.4",
+  "httpx2==2.7.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
