@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111318">
+<meta name="description" content="Silver AI Forecast research dashboard"><link rel="manifest" href="/static/manifest.webmanifest"><link rel="stylesheet" href="/static/styles.css"><title>Silver AI Forecast</title>
+</head>
+<body><main class="shell">
+<header><div><small>MetalPredictor</small><h1>Silver AI Forecast</h1><p>توقع بحثي للفضة — الساعة القادمة</p></div><span id="service" class="pill">جاري الاتصال</span></header>
+<section class="warning"><b>Research only</b><span>الميزة التنبؤية لم تُثبت بعد. BUY / SELL معطلان.</span></section>
+<section class="grid">
+<article class="card"><label>السعر الحالي</label><strong id="price">—</strong><small>USD / kg</small><p id="stamp">لا يوجد Forecast حي بعد</p></article>
+<article class="card"><label>Baseline</label><h2 id="baseline-model">Ridge α=100</h2><strong id="baseline-direction">—</strong><p id="baseline-price">—</p><small id="baseline-return">—</small></article>
+<article class="card"><label>Research challenger</label><h2 id="challenger-model">Ridge α=10</h2><strong id="challenger-direction">—</strong><p id="challenger-price">—</p><small id="challenger-return">—</small></article>
+</section>
+<section class="card"><h2>حالة النظام</h2><dl><div><dt>Edge</dt><dd id="edge">NOT_PROVEN</dd></div><div><dt>Features</dt><dd id="features">52</dd></div><div><dt>Source</dt><dd id="source">—</dd></div><div><dt>Quality</dt><dd id="quality">—</dd></div><div><dt>Telegram</dt><dd id="telegram">—</dd></div></dl></section>
+<section class="card"><div class="row"><h2>آخر التوقعات</h2><button id="refresh" type="button">تحديث</button></div><div class="scroll"><table><thead><tr><th>UTC</th><th>السعر</th><th>Baseline</th><th>Research</th><th>الجودة</th></tr></thead><tbody id="history"><tr><td colspan="5">لا توجد بيانات بعد.</td></tr></tbody></table></div></section>
+<footer>Silver AI Forecast • research only • no trade execution</footer>
+</main><script type="module" src="/static/app.js"></script></body></html>
