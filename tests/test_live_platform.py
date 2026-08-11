@@ -93,3 +93,11 @@ def test_scheduler_time_and_telegram_secret_transport():
     bad=TelegramForecastPublisher('000000:synthetic-test-token',('42',),client=httpx.Client(transport=httpx.MockTransport(fail)))
     with pytest.raises(RuntimeError) as cap: bad.send_text('42','x')
     assert '000000:synthetic-test-token' not in str(cap.value)
+
+def test_expected_market_gap_nans_are_imputed_by_frozen_contract(tmp_path:Path):
+    artifacts=_artifact_bundle(tmp_path/'artifacts'); engine=LivePredictionEngine(artifacts)
+    ts=engine.historical_last_datetime_utc+timedelta(hours=48)
+    snapshot=engine.predict([_bar(ts,2075.0)])
+    assert np.isfinite(snapshot.baseline_log_return_1h)
+    assert np.isfinite(snapshot.challenger_log_return_1h)
+    assert snapshot.research_only is True
