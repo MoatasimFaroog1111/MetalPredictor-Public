@@ -1,0 +1,9 @@
+.env
+.env.live
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+runtime/
+/data/private/
+*.sqlite3
