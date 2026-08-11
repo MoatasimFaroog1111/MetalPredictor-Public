@@ -39,9 +39,9 @@ class LivePredictionEngine:
         live=pd.DataFrame(rows); combined=pd.concat([self._historical,live],ignore_index=True,sort=False).sort_values('timestamp_utc').reset_index(drop=True); featured=self._assembler.transform(combined); newest=pd.Timestamp(live['timestamp_utc'].iloc[-1]); row=featured.loc[featured['timestamp_utc'].eq(newest)]
         if len(row)!=1: raise ValueError('Could not resolve latest feature row.')
         values=row.loc[:,self._baseline.feature_names].apply(pd.to_numeric,errors='coerce').to_numpy(float)
-        if not np.isfinite(values).all():
-            missing=[n for n in self._baseline.feature_names if not np.isfinite(float(pd.to_numeric(row[n],errors='coerce').iloc[0]))]
-            raise ValueError('LIVE_FEATURES_INCOMPLETE '+newest.isoformat()+' missing='+','.join(missing[:8]))
+        # NaN is expected around market gaps. The sealed model reproduces training-time
+        # median imputation and missing indicators. Never forward-fill exact-clock lags.
+        if np.isinf(values).any(): raise ValueError('LIVE_FEATURES_INVALID_INFINITE '+newest.isoformat())
         br=float(self._baseline.predict(row)[0]); cr=float(self._challenger.predict(row)[0]); close=float(row['close_usd_per_kg'].iloc[0]); latest=ordered[-1]
         return ForecastSnapshot(feature_timestamp_utc=newest.to_pydatetime(),decision_time_utc=(newest+pd.Timedelta(hours=1)).to_pydatetime(),current_price_usd_per_kg=close,baseline_model=self._baseline.model_name,baseline_log_return_1h=br,baseline_predicted_price_usd_per_kg=close*math.exp(br),baseline_direction=self._direction(br),challenger_model=self._challenger.model_name,challenger_log_return_1h=cr,challenger_predicted_price_usd_per_kg=close*math.exp(cr),challenger_direction=self._direction(cr),data_quality=latest.quality_flag,source_provider=latest.source_provider,source_compatible_with_training=(latest.source_provider=='HistData' and latest.market_type=='spot_bid'))
     @staticmethod
