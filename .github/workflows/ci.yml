@@ -28,7 +28,7 @@ jobs:
       - name: Compile
         run: python -m compileall -q src run_live.py docker_entrypoint_live.py
       - name: Tests
-        run: python -m pytest tests/test_live_platform.py tests/test_gold_api_live_source.py
+        run: python -m pytest tests/test_live_platform.py tests/test_gold_api_live_source.py tests/test_bullionvault_quote_provider.py
   docker:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
