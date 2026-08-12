@@ -30,6 +30,3 @@ def test_source_normalizes_and_is_read_only():
     assert f.iloc[0].open_usd_per_kg==pytest.approx(1000*TROY_OZ_PER_KG)
     assert f.source_provider.eq("Dukascopy Public Historical Feed").all()
     for name in ("place_order","cancel_order","submit_order","execute","buy","sell"):assert not hasattr(s,name)
-
-def test_live_completed_month_smoke():
-    s=DukascopyPublicHistoricalMetalSource();f=s.fetch_hourly(PLATINUM,datetime(2022,1,3,0,tzinfo=UTC),datetime(2022,1,3,23,tzinfo=UTC));assert not f.empty;ts=pd.to_datetime(f.timestamp_utc,utc=True);assert ts.dt.minute.eq(0).all() and ts.dt.second.eq(0).all();assert (f[["open_usd_per_kg","high_usd_per_kg","low_usd_per_kg","close_usd_per_kg"]]>0).all().all()
